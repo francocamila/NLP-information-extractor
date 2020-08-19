@@ -1,0 +1,5 @@
+wheel>=0.34.2
+spacy==2.3.0
+spacy-lookup>=0.1.0
+spacy-transformers>=0.6.2
+wasabi>=0.7.1
