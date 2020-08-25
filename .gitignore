@@ -1,0 +1,7 @@
+*/venv/*
+venv/
+.vscode/
+input/
+*.bin
+*.csv
+*.jpg

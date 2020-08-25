@@ -1,32 +1,37 @@
+#!/usr/bin/env python
 import spacy
+import plac
+from spacy import displacy
+from spacy.util import minibatch
+import torch
+import random
+import thinc
+from tqdm.auto import tqdm
+import unicodedata
+import wasabi
+import numpy
+from collections import Counter
 
-#Using BERT:
-#Model in portuguese:
-nlp = spacy.load('/home/camila/Documents/pt_bertlargeportuguesecased_lg')
 
 
-#Test text:
-doc = nlp(
-    "Olá mundo! O Gonzaguinha é um cachorro. Ele gosta de dormir, comer e brincar!"
+
+@plac.annotations(
+    model=("Model to load (needs parser and NER)", "positional", None, str)
 )
+def main(model='/home/camila/Documents/pt_bertbaseportuguesecased_lg'):
+    is_using_gpu = spacy.prefer_gpu()
+    if is_using_gpu:
+        torch.set_default_tensor_type("torch.cuda.FloatTensor")
+    nlp = spacy.load(model)
+    print("Loaded model '%s'" % model)
+    #print("Processing %d texts" % len(TEXTS))
 
-#Testing:
-
-
-for token in doc:
-    print(token.text, token.lemma_, token.pos_, token.tag_, token.dep_,
-    token.shape_, token.is_alpha, token.is_stop)
-#lemma: qual o lemmatization;
-#pos: simple pos tagging;
-#tag: detailed pos tagging;
-#dep: dependency parsing;
-#shape: the word shap;
-#is aplha: is the token an alpha chracter?
-#is stop: is the token part of a stop list? 
-
-#NER:
-
-for ent in doc.ents:
-    print(ent.text, ent.start_char, ent.end_char, ent.label)
+    doc = ("Aqui está um texto, é isso aí.")
+    
+    print(doc._.trf_word_pieces_) # String values of the wordpieces
+    
 
 
+if __name__ == "__main__":
+    plac.call(main)
+                                                                                                                                                                                                                                            
