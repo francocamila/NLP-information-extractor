@@ -17,7 +17,7 @@ def read_pdf(path):
     fp = open(path, 'rb')
     interpreter = PDFPageInterpreter(rsrcmgr, device)
     password = ""
-    maxpages = 0
+    maxpages = 1
     caching = True
     pagenos=set()
     for page in PDFPage.get_pages(fp, pagenos, maxpages=maxpages, password=password, caching=caching, check_extractable=True): 
