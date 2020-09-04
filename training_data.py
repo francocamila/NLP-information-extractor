@@ -14,17 +14,18 @@ from sparknlp.training import CoNLL
 import sparknlp
 spark = sparknlp.start()
 
-#dataset = './inputs/portuguese-poems.csv'
-#training_data = spark.read.format("csv").option("header", "true").load(dataset)
-#training_data.show()
+#Loading training data a CoNLL dataset
 
 training_data = CoNLL().readDataset(spark, "./inputs/dataset.ptbr.twitter.train.ner")
+
+#Loading BERT
 
 bert = BertEmbeddings.pretrained('bert_multi_cased', 'xx')\
 .setInputCols(["sentence", 'token'])\
 .setOutputCol("bert")\
 #.setCaseSensitive(False)\
 #.setPoollingLayer(0)
+
 
 nerTagger = NerDLApproach()\
 .setInputCols(["sentence", "token", "bert"])\
@@ -39,8 +40,10 @@ nerTagger = NerDLApproach()\
 .setIncludeConfidence(True)\
 .setTestDataset("test_withEmbeds.parquet")
 
+#Loading test data
 test_data = CoNLL().readDataset(spark, "./inputs/dataset.ptbr.twitter.train.ner")
 test_data = bert.transform(test_data)
+#Results
 test_data.write.parquet("test_withEmbeds.parquet")
 
 ner_pipeline = Pipeline(stages = [bert, nerTagger])
