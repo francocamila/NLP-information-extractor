@@ -1,17 +1,28 @@
-filename = 'out.txt'
-with open(filename, 'r') as file_object:
-    lines = file_object.readlines()
-    for i in lines:
-        position_ementa = i.find("Ementa")
-        position_exc = i.find("Vistos")
-        start_ementa = i[position_ementa:]
-        excludent = i[position_exc:]
+# problemas:
+# o textract nem sempre separa os paragrafos de forma correta
+# os carimbos estão sujando algumas informações importantes
 
-file_object.close()
+import textract
+import re
+ 
+text = textract.process("6.pdf", method='pdftotext').decode('utf-8')
 
-ementa = start_ementa.replace(excludent, " ")
-print(ementa)
+#separa a string em várias outras sempre que tiver duas quebras de linha:
+paragraphs = re.split('\n\n', text) 
 
+for paragraph in paragraphs:
+    comparative_paragraph = paragraph.lower()
+    if "assunto:" in comparative_paragraph:
+        position_ementa = comparative_paragraph.find("assunto")
+        ementa = paragraph[position_ementa:]
+        break
+
+if "vistos" in comparative_paragraph:
+    position_exc = comparative_paragraph.find("vistos")
+    excludent = paragraph[position_exc:]
+    ementa = ementa.replace(excludent, " ")
+        
+# print(ementa)
 
 
 
