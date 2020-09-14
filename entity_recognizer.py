@@ -31,7 +31,7 @@ token = Tokenizer()\
     .setInputCols(['sentence'])\
     .setOutputCol('token')
 
-bert = BertEmbeddings.pretrained('bert_multi_cased', 'xx')\
+bert = BertEmbeddings.load('./BertEmbeddings_bert-base-portuguese-cased')\
     .setInputCols(["sentence", 'token'])\
     .setOutputCol("bert")
 

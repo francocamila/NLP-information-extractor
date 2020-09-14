@@ -16,11 +16,11 @@ spark = sparknlp.start()
 
 #Loading training data a CoNLL dataset
 
-training_data = CoNLL().readDataset(spark, "./inputs/dataset.ptbr.twitter.train.ner")
+training_data = CoNLL().readDataset(spark, "./inputs/train.ner")
 
 #Loading BERT
 
-bert = BertEmbeddings.pretrained('bert_multi_cased', 'xx')\
+bert = BertEmbeddings.load('./BertEmbeddings_bert-base-portuguese-cased')\
 .setInputCols(["sentence", 'token'])\
 .setOutputCol("bert")\
 #.setCaseSensitive(False)\
@@ -38,13 +38,13 @@ nerTagger = NerDLApproach()\
 .setEvaluationLogExtended(True)\
 .setEnableOutputLogs(True)\
 .setIncludeConfidence(True)\
-.setTestDataset("test_withEmbeds.parquet")
+.setTestDataset("test.parquet")
 
 #Loading test data
-test_data = CoNLL().readDataset(spark, "./inputs/dataset.ptbr.twitter.train.ner")
+test_data = CoNLL().readDataset(spark, "./inputs/test.ner")
 test_data = bert.transform(test_data)
 #Results
-test_data.write.parquet("test_withEmbeds.parquet")
+test_data.write.parquet("test.parquet")
 
 ner_pipeline = Pipeline(stages = [bert, nerTagger])
 ner_model = ner_pipeline.fit(training_data)
