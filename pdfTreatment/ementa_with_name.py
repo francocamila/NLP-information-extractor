@@ -2,10 +2,25 @@
 import textract
 import re
  
-text = textract.process("6.pdf", method='pdfminer').decode('utf-8')
+pdf_name = "48.pdf"
+text = textract.process(pdf_name, method='pdfminer').decode('utf-8')
 
 # separa a string em várias outras sempre que tiver duas quebras de linha:
-paragraphs = re.split('\n\n', text) 
+paragraphs = re.split('\n', text) 
+
+def get_orgao(text):
+    '''
+    Gets the organization of each judgment and treats them.
+    Returns the organization.
+    '''
+    keyword = "conselho"
+    for paragraph in paragraphs:
+        comparative_paragraph = paragraph.lower()
+        if keyword in comparative_paragraph:
+            orgao = paragraph
+            break
+    return orgao
+
 
 def find_processos(text):
     '''
@@ -54,4 +69,3 @@ def ementa_extract(text):
     ementa = '\n'.join(texts)
     return ementa
 
-       
