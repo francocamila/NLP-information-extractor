@@ -1,24 +1,42 @@
-# problemas:
-# o textract nem sempre separa os paragrafos de forma correta
-# os carimbos estão sujando algumas informações importantes
-# 
+# Conselho administrativo de recursos fiscais
 import textract
 import re
  
-text = textract.process("48.pdf", method='pdftotext').decode('utf-8')
+text = textract.process("6.pdf", method='pdfminer').decode('utf-8')
+
 # separa a string em várias outras sempre que tiver duas quebras de linha:
 paragraphs = re.split('\n\n', text) 
 
-def get_processos(text):
+def find_processos(text):
+    '''
+    Finds the process number.
+    Receives the text and returns the occurrences of process numbers.
+    '''
     pattern = r"\d{5}\.\d{5}.?\d\/\d{4}[^\d]\d{2}"
-    # r"\d{5}\.\d{6}\/\d{4}\-\d{2}"
     return re.findall(pattern, text)
 
 
-def ementa_extract(paragraphs):
+def get_processos(text):
     '''
-    extracts the ementas from pdf's.
-    receives the paragraphs and return the ementa
+    Treates and gets the first occurrence of the process number.
+    '''
+    for paragraph in paragraphs:
+        comparative_paragraph = paragraph.lower()
+        if find_processos(paragraph):
+            try:
+                out = str(find_processos(paragraph)).split("xad")
+                out = out[0].replace("\\", " ") + out[1]
+                out = str(out).strip("[], \\,  ''")
+            except:
+                out = str(find_processos(paragraph)).strip("[], ''")
+            break
+    return out
+
+
+def ementa_extract(text):
+    '''
+    Extracts the ementas from pdf's.
+    Receives the text and returns the ementa.
     '''
     for paragraph in paragraphs:
         comparative_paragraph = paragraph.lower()
@@ -33,22 +51,4 @@ def ementa_extract(paragraphs):
         ementa = ementa.replace(excludent, " ")
         
     return ementa
-
-
-for paragraph in paragraphs:
-    comparative_paragraph = paragraph.lower()
-    if get_processos(paragraph):
-        try:
-            out = str(get_processos(paragraph)).split("xad")
-            out = out[0].replace("\\", " ") + out[1]
-            out = str(out).strip("[], \\,  ''")
-        except:
-            out = str(get_processos(paragraph)).strip("[], ''")
-        print("Processo nº: ", out)
-        break
-
-print(ementa_extract(paragraphs))
-
-
-
-        
+       
