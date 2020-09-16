@@ -38,17 +38,20 @@ def ementa_extract(text):
     Extracts the ementas from pdf's.
     Receives the text and returns the ementa.
     '''
+    texts = []
+    start = "assunto:"
+    end = "vistos"
+    mark = 0
     for paragraph in paragraphs:
         comparative_paragraph = paragraph.lower()
-        if "assunto:" in comparative_paragraph:
-            position_ementa = comparative_paragraph.find("assunto")
-            ementa = paragraph[position_ementa:]
+        if start in comparative_paragraph:
+            mark = 1
+        if end in comparative_paragraph:
             break
+        if mark:
+            texts.append(paragraph)
 
-    if "vistos" in comparative_paragraph:
-        position_exc = comparative_paragraph.find("vistos")
-        excludent = paragraph[position_exc:]
-        ementa = ementa.replace(excludent, " ")
-        
+    ementa = '\n'.join(texts)
     return ementa
+
        
