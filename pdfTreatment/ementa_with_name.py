@@ -1,14 +1,28 @@
-# Conselho administrativo de recursos fiscais
 import textract
 import re
  
-pdf_name = "48.pdf"
+pdf_name = "17.pdf"
 text = textract.process(pdf_name, method='pdfminer').decode('utf-8')
 
-# separa a string em várias outras sempre que tiver duas quebras de linha:
-paragraphs = re.split('\n', text) 
+def cleanner(text):
+    '''
+    Cleans some parts unwanteds and prepares the text for extration
+    Add new words in the variable 'keywords' whenever necessary
+    '''
+    blocks = re.split('\n\n', text)
+    keywords = ["assinado", "fl. 2", "df carf mf",]
+    for block in blocks:
+        comparative_paragraph = block.lower()
+        for keyword in keywords:
+            if keyword in comparative_paragraph:
+                position_exc = comparative_paragraph.find(keyword)
+                excludent = block[position_exc:]
+                text = text.replace(excludent, " ")
+    paragraphs = re.split('\n', text)
+    return paragraphs
+    
 
-def get_orgao(text):
+def get_orgao(paragraphs):
     '''
     Gets the organization of each judgment and treats them.
     Returns the organization.
@@ -31,7 +45,7 @@ def find_processos(text):
     return re.findall(pattern, text)
 
 
-def get_processos(text):
+def get_processos(paragraphs):
     '''
     Treates and gets the first occurrence of the process number.
     '''
@@ -48,24 +62,29 @@ def get_processos(text):
     return out
 
 
-def ementa_extract(text):
+def ementa_extract(paragraphs):
     '''
     Extracts the ementas from pdf's.
     Receives the text and returns the ementa.
     '''
     texts = []
     start = "assunto:"
-    end = "vistos"
+    ends = ["vistos", "acordam"]
     mark = 0
+    
     for paragraph in paragraphs:
         comparative_paragraph = paragraph.lower()
         if start in comparative_paragraph:
             mark = 1
-        if end in comparative_paragraph:
-            break
-        if mark:
+        for end in ends: 
+            if end in comparative_paragraph:
+                mark = 2
+        if mark == 1:
             texts.append(paragraph)
+        if mark == 2:
+            break
 
     ementa = '\n'.join(texts)
     return ementa
+
 
