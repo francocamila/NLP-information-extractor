@@ -1,7 +1,7 @@
 import textract
 import re
  
-pdf_name = "17.pdf"
+pdf_name = "./pdfs/4.PDF"
 text = textract.process(pdf_name, method='pdfminer').decode('utf-8')
 
 def cleanner(text):
@@ -41,7 +41,7 @@ def find_processos(text):
     Finds the process number.
     Receives the text and returns the occurrences of process numbers.
     '''
-    pattern = r"\d{5}\.\d{5}.?\d\/\d{4}[^\d]\d{2}"
+    pattern = r"\d{5}\.\d{5}.?\d\/\d{4}[^\d]\d{2}|\d{5}\.\d{3}.?\d{3}\/\d{2}(-| )\d{2}|\d{3}\.\d{3}.?\d{3}\/\d{2}(-| )\d{2}|\d{4}\.\d{3}.?\d{3}\/\d{2}(-| )\d{2}"
     return re.findall(pattern, text)
 
 
@@ -52,12 +52,7 @@ def get_processos(paragraphs):
     for paragraph in paragraphs:
         comparative_paragraph = paragraph.lower()
         if find_processos(paragraph):
-            try:
-                out = str(find_processos(paragraph)).split("xad")
-                out = out[0].replace("\\", " ") + out[1]
-                out = str(out).strip("[], \\,  ''")
-            except:
-                out = str(find_processos(paragraph)).strip("[], ''")
+            out = paragraph
             break
     return out
 
@@ -83,8 +78,6 @@ def ementa_extract(paragraphs):
             texts.append(paragraph)
         if mark == 2:
             break
-
     ementa = '\n'.join(texts)
     return ementa
-
 
