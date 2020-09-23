@@ -1,7 +1,7 @@
 import textract
 import re
  
-pdf_name = "./pdfs/45.pdf"
+pdf_name = "./pdfs/6.pdf"
 text = textract.process(pdf_name, method='pdfminer').decode('utf-8')
 
 def cleanner(text):
@@ -95,3 +95,17 @@ def get_unnamed_ementa(text):
                 return ementa  
         texts.append(paragraph)
 
+
+# paragraphs = cleanner(text)
+# print("DATA EXTRATION:")
+# print("------------------------------------------------------------------")
+# print(get_orgao(paragraphs))
+# print("------------------------------------------------------------------")
+# print(get_processos(paragraphs))
+# print("------------------------------------------------------------------")
+# # Se a ementa tiver indicada com "assunto"
+# print(get_named_ementa(paragraphs))
+# print("------------------------------------------------------------------")
+# # Se a ementa não tiver indicada
+# print(get_unnamed_ementa(text))
+# print("------------------------------------------------------------------")
