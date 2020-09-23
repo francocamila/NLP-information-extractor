@@ -11,6 +11,6 @@ apt-get install -y openjdk-8-jdk-headless -qq > /dev/null
 - E as libraries: 
 
 ```bash
-pip install requirements.txt
+pip install -r requirements.txt
 ```
 
