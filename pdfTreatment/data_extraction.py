@@ -1,7 +1,7 @@
 import textract
 import re
  
-pdf_name = "./pdfs/6.pdf"
+pdf_name = "./pdfs/20.pdf"
 text = textract.process(pdf_name, method='pdfminer').decode('utf-8')
 
 def cleanner(text):
@@ -27,6 +27,7 @@ def get_orgao(paragraphs):
     Gets the organization of each judgment and treats them.
     Returns the organization.
     '''
+    orgao = ''
     keyword = "conselho"
     for paragraph in paragraphs:
         comparative_paragraph = paragraph.lower()
@@ -41,7 +42,7 @@ def find_processos(text):
     Finds the process number.
     Receives the text and returns the occurrences of process numbers.
     '''
-    pattern = r"\d{5}\.\d{5}.?\d\/\d{4}[^\d]\d{2}|\d{5}\.\d{3}.?\d{3}\/\d{2}(-| )\d{2}|\d{3}\.\d{3}.?\d{3}\/\d{2}(-| )\d{2}|\d{4}\.\d{3}.?\d{3}\/\d{2}(-| )\d{2}"
+    pattern = r"\d{5}\.\d{5}.?\d\/\d{4}[^\d]\d{2}|\d?\d?\d{3}\.?\d{3}.?\d{3}\/\d{2}(-| )\d{2}|\d?\.?\d{3}.\d{3}"
     return re.findall(pattern, text)
 
 
@@ -54,7 +55,10 @@ def get_processos(paragraphs):
         if find_processos(paragraph):
             out = paragraph
             break
-    return out
+    try:
+        return out
+    except:
+        print("Process number not found")
 
 
 def get_named_ementa(paragraphs):
@@ -63,20 +67,24 @@ def get_named_ementa(paragraphs):
     Receives the clear text and returns the ementa.
     '''
     texts = []
-    start = "assunto:"
-    ends = ["vistos", "acordam"]
+    starts = ["assunto:", "ementa"]
+    ends = ["vistos", "acordam", "acórdão"]
     mark = 0
     
     for paragraph in paragraphs:
         comparative_paragraph = paragraph.lower()
-        if start in comparative_paragraph:
-            mark = 1
-        for end in ends: 
-            if end in comparative_paragraph:
-                ementa = '\n'.join(texts)
-                return ementa
+        if mark == 0:
+            for start in starts:
+                if start in comparative_paragraph:
+                    mark = 1
+                    break    
         if mark == 1:
             texts.append(paragraph)
+            for end in ends: 
+                if end in comparative_paragraph:
+                    ementa = '\n'.join(texts)
+                    return ementa
+
 
 def get_unnamed_ementa(text):
     '''
@@ -96,16 +104,19 @@ def get_unnamed_ementa(text):
         texts.append(paragraph)
 
 
-# paragraphs = cleanner(text)
-# print("DATA EXTRATION:")
-# print("------------------------------------------------------------------")
-# print(get_orgao(paragraphs))
-# print("------------------------------------------------------------------")
-# print(get_processos(paragraphs))
-# print("------------------------------------------------------------------")
+paragraphs = cleanner(text)
+print("DATA EXTRATION:")
+print("------------------------------------------------------------------")
+if get_orgao(paragraphs):
+    print(get_orgao(paragraphs))
+else:
+    print("Superior Tribunal de Justiça")
+print("------------------------------------------------------------------")
+print(get_processos(paragraphs))
+print("------------------------------------------------------------------")
 # # Se a ementa tiver indicada com "assunto"
-# print(get_named_ementa(paragraphs))
+print(get_named_ementa(paragraphs))
 # print("------------------------------------------------------------------")
 # # Se a ementa não tiver indicada
 # print(get_unnamed_ementa(text))
-# print("------------------------------------------------------------------")
+print("------------------------------------------------------------------")
