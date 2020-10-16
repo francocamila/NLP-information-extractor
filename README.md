@@ -3,7 +3,7 @@
 
 ## 🚀 Quickstart Django
 
-- Instale as libraries: 
+- Install the libraries: 
 
 ```bash
 pip install -r requirements.txt
