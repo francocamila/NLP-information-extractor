@@ -1,10 +1,7 @@
 import textract
 import re
+from .models import Jugdments
 
-pdf_name = "1.pdf"
-text = textract.process(pdf_name, method='pdfminer').decode('utf-8')
-paragraphs = re.split('\n\n', text)
-clean_paragraphs = cleanner(text)
 
 def occurrences_keywords(paragraphs):
     '''
@@ -38,8 +35,12 @@ def occurrences_keywords(paragraphs):
                     occurrences[keyword] += 1
                 else:
                     occurrences[keyword] = 1
+    print(occurrences)
     return occurrences
 
+def save_db(title):
+    judgments = Judgments(title = lastest_file, keyword = keyword, count = count)
+    judments.save()
 
 def cleanner(text):
     '''
