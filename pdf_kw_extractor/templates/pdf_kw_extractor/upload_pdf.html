@@ -1,0 +1,51 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!--Arquivos Javascript remoto-->
+  <script type="text/javascript" charset="utf8" src="https://code.jquery.com/jquery-3.3.1.js"></script>
+
+  <!--Arquivos CSS remotos-->
+  <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+
+  <!--Arquivos CSS locais-->
+  <link rel='stylesheet' type='text/css' href="{% static 'css/upload_pdf.css' %}">
+</head>
+
+<body>
+  <!--Menu superior
+  <ul class="topnav">
+  </ul>-->
+
+  <!--Titulo e logo-->
+  <div>
+    <h1>
+      <br>
+      <img src="{% static 'img/logo_blue.png' %}" style="width:10%" >    
+      <br>
+      Pdfs key words extractor
+    </h1>
+  </div>
+
+  <!--Formulario de uploads de pdfs-->
+
+    {% csrf_token %}
+    {% block content %}
+    <form class="form" method="post" enctype="multipart/form-data">
+        <ul>
+            <h2>
+              Faça o Upload do seu pdf aqui:
+            </h2>
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Upload</button>
+    </form>
+    {% endblock %}
+
+    </ul>
+  </form>
+</body>
+</html>

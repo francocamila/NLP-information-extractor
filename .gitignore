@@ -5,3 +5,6 @@ input/
 *.bin
 *.csv
 *.jpg
+staticfiles
+media
+*.sqlite3

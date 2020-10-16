@@ -1,16 +1,26 @@
 # NLP-information-extractor
 
 
-## 🚀 QuickStart with Spark-NLP
+## 🚀 Quickstart Django
 
-- Instale o Java 8:
-
-```bash
-apt-get install -y openjdk-8-jdk-headless -qq > /dev/null
-```
-- E as libraries: 
+- Instale as libraries: 
 
 ```bash
 pip install -r requirements.txt
+```
+
+- Migrations:
+
+```bash
+python manage.py makemigrations
+```
+
+```bash
+python manage.py migrate
+```
+- Run:
+
+```bash
+python manage.py runserver
 ```
 
