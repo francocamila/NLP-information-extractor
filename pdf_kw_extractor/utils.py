@@ -35,12 +35,14 @@ def occurrences_keywords(paragraphs):
                     occurrences[keyword] += 1
                 else:
                     occurrences[keyword] = 1
-    print(occurrences)
     return occurrences
 
-def save_db(title):
-    judgments = Judgments(title = lastest_file, keyword = keyword, count = count)
-    judments.save()
+
+def save_db(lastest_file, occurrences_keywords):
+    for occurrence in occurrences_keywords.items():
+        judgments = Judgments(title = lastest_file, keyword = occurrence[0], count = occurrence[1])
+        judments.save()
+
 
 def cleanner(text):
     '''
