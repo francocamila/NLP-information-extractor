@@ -30,3 +30,7 @@ def upload_pdf(request):
     return render(request, 'pdf_kw_extractor/upload_pdf.html', {
             'form':form,
         })
+
+def list_keywords(request):
+    jugdments = Jugdments.objects.filter().order_by('created_date')
+    return render(request, 'pdf_kw_extractor/list_keywords.html', {'jugdments':jugdments})
