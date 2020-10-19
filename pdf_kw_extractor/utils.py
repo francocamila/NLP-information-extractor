@@ -40,8 +40,8 @@ def occurrences_keywords(paragraphs):
 
 def save_db(lastest_file, occurrences_keywords):
     for occurrence in occurrences_keywords.items():
-        judgments = Judgments(title = lastest_file, keyword = occurrence[0], count = occurrence[1])
-        judments.save()
+        jugdments = Jugdments(title = lastest_file, keyword = occurrence[0], count = occurrence[1])
+        jugdments.save()
 
 
 def cleanner(text):

@@ -22,8 +22,8 @@ def upload_pdf(request):
             text = textract.process(lastest_file, method='pdfminer').decode('utf-8')
             paragraphs = re.split('\n\n', text)
             clean_paragraphs = cleanner(text)
-            occurrences_keywords = occurrences_keywords(paragraphs)
-            save_db(lastest_file, occurrences_keywords)
+            occurrences = occurrences_keywords(paragraphs)
+            save_db(lastest_file, occurrences)
             return redirect('/')
     else:
         form = UploadPdfForm()
