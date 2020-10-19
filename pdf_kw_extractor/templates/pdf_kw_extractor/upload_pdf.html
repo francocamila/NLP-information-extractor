@@ -12,13 +12,16 @@
   <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/icon?family=Material+Icons">
 
   <!--Arquivos CSS locais-->
+  <link rel='stylesheet' type='text/css' href="{% static 'css/topnav.css' %}">
   <link rel='stylesheet' type='text/css' href="{% static 'css/upload_pdf.css' %}">
 </head>
 
 <body>
-  <!--Menu superior
+  <!--Menu superior-->
   <ul class="topnav">
-  </ul>-->
+    <li><a href="{% url 'upload_pdf' %}">Upload novo pdf</a></li>
+    <li class="active"><a href="{% url 'list_keywords' %}">Lista de Acordãos</a></li>
+  </ul>
 
   <!--Titulo e logo-->
   <div>
