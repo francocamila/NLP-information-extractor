@@ -6,7 +6,7 @@
   margin: 50px auto;
   box-shadow: 1px 1px 25px rgba(0, 0, 0, 0.35);
   border-radius: 10px;
-  border: 6px solid #305A72;
+  border: 6px solid #7F88C2;
 }
 
 .form ul
@@ -39,7 +39,7 @@
 
 .form h2
 {
-  background: #305A72;
+  background: #7F88C2;
   font-family: 'Open Sans Condensed', sans-serif;
   color: #FFFFFF;
   font-size: 18px;

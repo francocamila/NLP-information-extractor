@@ -1,4 +1,4 @@
-/* Titulo e logo da Globo */
+/* Titulo e logo */
 h1
 {
   text-transform: uppercase;
@@ -15,7 +15,7 @@ h1
 .topnav
 {
   overflow: hidden;
-  background-color: #305A72;
+  background-color: #575F94;
   list-style-type: none;
   margin: 0;
   padding: 0;
@@ -43,7 +43,7 @@ h1
 
 .topnav li.active
 {
-  background-color: #4CAF50;
+  background-color: #2AAE7C;
   color: white;
 }
 
