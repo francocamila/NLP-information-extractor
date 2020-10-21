@@ -48,13 +48,14 @@
 
   <!--Tabela-->
   <div class="lista">
-    <table class="display" id="processos">
+    <table class="display" id="judgments">
       <!--Cabecalho-->
       <thead>
         <tr>
           <th>PDF</th>
           <th>Palavra Chave</th>
           <th>Ocorrência</th>
+          <th>Data</th>
         </tr>
       </thead>
 
@@ -65,10 +66,11 @@
           <td>{{ jugdment.title }}</td>
           <td>{{ jugdment.keyword }}</td>
           <td>{{ jugdment.count }}</td>
+          <td>{{ jugdment.created_date }}</td>
           <!--<td>
             <a class="editar" title="Editar" data-toggle="tooltip"><i class="material-icons">edit</i></a>
-            <a class="deletar" title="Deletar" data-toggle="tooltip" href="delete/{{ post.id }}" onclick="return confirm('Tem certeza que deseja deletar esse processo?')" id = '{{ post.id }}'><i class="material-icons">&#xE872;</i></a>-->
-          </td>
+            <a class="deletar" title="Deletar" data-toggle="tooltip" href="delete/{{ post.id }}" onclick="return confirm('Tem certeza que deseja deletar esse processo?')" id = '{{ post.id }}'><i class="material-icons">&#xE872;</i></a>
+          </td>-->
 
         </tr>
         {% endfor %}
@@ -85,14 +87,14 @@
     $.fn.dataTable.moment( 'DD/MM/YYYY' );
 
     // Plugin DataTables:
-    $('#processos').DataTable(
+    $('#judgments').DataTable(
     {
       dom: 'Bfrtip',
       // Define quantidade de processos por pagina:
       "pageLength": 50,
 
       // Define a ordem padrao da tabela:
-      "order": [[ 5, "desc" ]],
+      //"order": [[ 5, "desc" ]],
 
       // Configuracoes padroes da tabela:
       columnDefs:
@@ -100,14 +102,9 @@
         // Por padrao, esconde as 3 primeiras colunas:
         {
           visible: false,
-          targets: [ 0, 1, 2, 6 ],
+          targets: [ 3],
         },
 
-        // Retira a coluna "Acoes" do botao "Column visibility":
-        {
-            targets: 7,
-            className: 'noVis'
-        }
       ],
 
       // Configuracao dos botoes da tabela:
@@ -124,7 +121,7 @@
           extend: 'copyHtml5',
           exportOptions:
           {
-            columns: [ 0, 1, 2, 3, 4, 5, 6 ]
+            columns: [ 0, 1, 2, 3 ]
           }
         },
 
@@ -133,7 +130,7 @@
           extend: 'excelHtml5',
           exportOptions:
           {
-            columns: [ 0, 1, 2, 3, 4, 5, 6 ]
+            columns: [ 0, 1, 2, 3 ]
           }
         },
 
@@ -142,7 +139,7 @@
           extend: 'csvHtml5',
           exportOptions:
           {
-            columns: [ 0, 1, 2, 3, 4, 5, 6 ]
+            columns: [ 0, 1, 2, 3 ]
           }
         },
 
@@ -151,7 +148,7 @@
           extend: 'pdfHtml5',
           exportOptions:
           {
-            columns: [ 0, 1, 2, 3, 4, 5, 6 ]
+            columns: [ 0, 1, 2, 3 ]
           }
         },
       ]
