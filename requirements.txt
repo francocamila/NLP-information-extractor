@@ -1,5 +1,5 @@
-pyspark==2.4.6
-spark-nlp
 numpy==1.19.1
 textract==1.6.3
 Django==3.1.2
+spacy>= 2.3.2
+psycopg2>=2.7,<3.

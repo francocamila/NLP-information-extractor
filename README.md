@@ -1,26 +1,22 @@
 # NLP-information-extractor
 
 
-## 🚀 Quickstart Django
+## 🚀 Quickstart 
 
-- Instale as libraries: 
-
-```bash
-pip install -r requirements.txt
-```
-
-- Migrations:
+- Build: 
 
 ```bash
-python manage.py makemigrations
+docker-compose build
 ```
+
+- Deploy:
 
 ```bash
-python manage.py migrate
+docker-compose up
 ```
-- Run:
+
+- Logs:
 
 ```bash
-python manage.py runserver
+docker-compose logs
 ```
-

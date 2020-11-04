@@ -1,0 +1,16 @@
+version: '3'
+
+services:
+  db:
+    image: postgres:9.6
+    env_file: dev-env
+  web:
+    build: .
+    env_file: dev-env
+    command: ["sh", "start.sh"]
+    volumes:
+      - .:/pdf_keywords
+    ports:
+       - "8000:8000"
+    depends_on:
+      - db
