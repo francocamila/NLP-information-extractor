@@ -1,7 +1,9 @@
 import textract
 import re
+import json
+import csv
  
-pdf_name = "./pdfs/20.pdf"
+pdf_name = "./acordaos-18-11-2020/03.PDF"
 text = textract.process(pdf_name, method='pdfminer').decode('utf-8')
 
 def cleanner(text):
@@ -93,30 +95,86 @@ def get_unnamed_ementa(text):
     '''
     paragraphs = re.split('\n\n', text)
     texts = []
+    rest = []
     ends = ["vistos", "acordam"]
+    mark = 0
     
     for paragraph in paragraphs:
         comparative_paragraph = paragraph.lower()
         for end in ends: 
             if end in comparative_paragraph:
-                ementa = '\n'.join(texts[-2:])
-                return ementa  
+                ementa = '\n'.join(texts[-5:])
+                rest.append(ementa)
+                mark = 1
+                break
+        if mark == 1:
+            rest.append(paragraph)
         texts.append(paragraph)
+    text = '\n'.join(rest)
+    return ementa, text
 
+
+def get_text(paragraphs):
+    texts = []
+    starts = ["assunto:", "ementa"]
+    mark = 0
+    
+    for paragraph in paragraphs:
+        comparative_paragraph = paragraph.lower()
+        if mark == 0:
+            for start in starts:
+                if start in comparative_paragraph:
+                    mark = 1
+                    break          
+        if mark == 1:
+            texts.append(paragraph)
+    text = '\n'.join(texts)
+    return text
+
+################################
 
 paragraphs = cleanner(text)
-print("DATA EXTRATION:")
-print("------------------------------------------------------------------")
+
 if get_orgao(paragraphs):
-    print(get_orgao(paragraphs))
+    orgao = get_orgao(paragraphs)
 else:
-    print("Superior Tribunal de Justiça")
-print("------------------------------------------------------------------")
-print(get_processos(paragraphs))
-print("------------------------------------------------------------------")
-# # Se a ementa tiver indicada com "assunto"
-print(get_named_ementa(paragraphs))
-# print("------------------------------------------------------------------")
-# # Se a ementa não tiver indicada
-# print(get_unnamed_ementa(text))
-print("------------------------------------------------------------------")
+    orgao = "Superior Tribunal de Justiça"
+
+processo = get_processos(paragraphs)
+
+# Se a ementa tiver indicada com "assunto"
+# ementa = get_named_ementa(paragraphs)
+
+# Se a ementa não tiver indicada
+ementa, texto = get_unnamed_ementa(text)
+
+# texto = get_text(paragraphs)
+
+print(orgao)
+print("--------------------")
+print(processo)
+print("--------------------")
+print(ementa)
+# print("--------------------")
+# print(texto)
+# with open('dados_acordaos.csv', mode='a', newline='') as csv_file:
+    
+#     fieldnames = ["nomePdf", "orgao", "processo", "ementa", "texto"]
+#     writer = csv.DictWriter(csv_file, fieldnames=fieldnames)
+    
+#     writer.writerow({"nomePdf": pdf_name, "orgao": orgao, "processo": processo, "ementa": ementa, "texto": texto})
+     
+
+
+
+
+
+
+
+
+# Se a ementa não tiver indicada
+# dados['ementa'], dados['texto'] = get_unnamed_ementa(text)
+
+
+# with open('./jsons/26.json', 'w') as fp:
+#             fp.write(json.dumps(dados, ensure_ascii=True, indent=4))
