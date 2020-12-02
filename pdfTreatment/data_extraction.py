@@ -3,7 +3,7 @@ import re
 import json
 import csv
  
-pdf_name = "./acordaos-18-11-2020/03.PDF"
+pdf_name = "./pdfs/00.pdf"
 text = textract.process(pdf_name, method='pdfminer').decode('utf-8')
 
 def cleanner(text):
@@ -115,6 +115,10 @@ def get_unnamed_ementa(text):
 
 
 def get_text(paragraphs):
+    '''
+    Extracts the rest of the text.
+    Receives the paragraphs of entire document and returns the text.
+    '''
     texts = []
     starts = ["assunto:", "ementa"]
     mark = 0
@@ -131,39 +135,64 @@ def get_text(paragraphs):
     text = '\n'.join(texts)
     return text
 
-################################
+
+def convert_to_json(paragraphs):
+    '''
+    Transfers all data to a json file.
+    Receives the clear text and returns a json.
+    '''
+    if get_orgao(paragraphs):
+        dados['orgao'] = get_orgao(paragraphs)
+    else:
+        dados['orgao'] = "Superior Tribunal de Justiça"
+
+    dados['processo'] = get_processos(paragraphs)
+    ## Se a ementa não tiver indicada
+    # dados['ementa'], dados['texto'] = get_unnamed_ementa(text)
+
+    ## Se a ementa estiver indicada
+    # dados['ementa'] = get_named_ementa(paragraphs)
+    # dados['texto'] = get_text(paragraphs)
+
+
+    with open('./jsons/0.json', 'w') as fp:
+                fp.write(json.dumps(dados, ensure_ascii=True, indent=4))
+
+
+def convert_to_csv(paragraphs):
+    '''
+    Transfers all data to a csv file.
+    Receives the clear text and returns a row in the csv table.
+    '''
+    if get_orgao(paragraphs):
+        orgao = get_orgao(paragraphs)
+    else:
+        orgao = "Superior Tribunal de Justiça"
+
+    processo = get_processos(paragraphs)
+    ## Se a ementa tiver indicada com "assunto"
+    # ementa = get_named_ementa(paragraphs)
+    # texto = get_text(paragraphs)
+
+    ## Se a ementa não tiver indicada
+    # ementa, texto = get_unnamed_ementa(text)
+
+    with open('dados_acordaos.csv', mode='a', newline='') as csv_file:
+        fieldnames = ["nomePdf", "orgao", "processo", "ementa", "texto"]
+        writer = csv.DictWriter(csv_file, fieldnames=fieldnames)    # Comment this line after reading the first file
+        writer.writerow({
+            "nomePdf": pdf_name, 
+            "orgao": orgao, 
+            "processo": processo, 
+            "ementa": ementa, 
+            "texto": texto
+            })
+
+
 
 paragraphs = cleanner(text)
-
-if get_orgao(paragraphs):
-    orgao = get_orgao(paragraphs)
-else:
-    orgao = "Superior Tribunal de Justiça"
-
-processo = get_processos(paragraphs)
-
-# Se a ementa tiver indicada com "assunto"
-# ementa = get_named_ementa(paragraphs)
-
-# Se a ementa não tiver indicada
-ementa, texto = get_unnamed_ementa(text)
-
-# texto = get_text(paragraphs)
-
-print(orgao)
-print("--------------------")
-print(processo)
-print("--------------------")
-print(ementa)
-# print("--------------------")
-# print(texto)
-# with open('dados_acordaos.csv', mode='a', newline='') as csv_file:
-    
-#     fieldnames = ["nomePdf", "orgao", "processo", "ementa", "texto"]
-#     writer = csv.DictWriter(csv_file, fieldnames=fieldnames)
-    
-#     writer.writerow({"nomePdf": pdf_name, "orgao": orgao, "processo": processo, "ementa": ementa, "texto": texto})
-     
+# convert_to_csv(paragraphs)
+# convert_to_json(paragraphs)
 
 
 
@@ -171,10 +200,3 @@ print(ementa)
 
 
 
-
-# Se a ementa não tiver indicada
-# dados['ementa'], dados['texto'] = get_unnamed_ementa(text)
-
-
-# with open('./jsons/26.json', 'w') as fp:
-#             fp.write(json.dumps(dados, ensure_ascii=True, indent=4))
