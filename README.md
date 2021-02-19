@@ -7,8 +7,8 @@ Projeto criado com o intuito de extrair e classificar informações de acórdão
 Os dados extraídos foram: 
 - ementa de cada acórdão;
 - número do processo;
-- Nome do órgão;
-- Restante do texto;
+- nome do órgão;
+- restante do texto;
 
 O projeto está em fase de desenvolvimento, e uma parte dele se encontra em uma aplicação feita em Django: O usuário submete um arquivo em PDF contendo um acórdão, no qual palavras chaves são extraídas e o número de suas ocorrências no texto são apresentadas em uma tabela.
 
