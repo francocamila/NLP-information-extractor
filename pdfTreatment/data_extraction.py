@@ -2,8 +2,8 @@ import textract
 import re
 import json
 import csv
- 
-pdf_name = "./pdfs/00.pdf"
+
+pdf_name = "./acordaos-18-11-2020/padrao1/41.pdf"
 text = textract.process(pdf_name, method='pdfminer').decode('utf-8')
 
 def cleanner(text):
@@ -69,15 +69,16 @@ def get_named_ementa(paragraphs):
     Receives the clear text and returns the ementa.
     '''
     texts = []
-    starts = ["assunto:", "ementa"]
-    ends = ["vistos", "acordam", "acórdão"]
+    starts = ["assunto:", "ementa:", " ementa ", "assunto"]
+    ends = [" vistos ", "acordam", "vistos,"]
     mark = 0
     
     for paragraph in paragraphs:
-        comparative_paragraph = paragraph.lower()
+        comparative_paragraph = paragraph.lower() 
         if mark == 0:
             for start in starts:
                 if start in comparative_paragraph:
+                    print(paragraph)
                     mark = 1
                     break    
         if mark == 1:
@@ -191,6 +192,22 @@ def convert_to_csv(paragraphs):
 
 
 paragraphs = cleanner(text)
+# for paragraph in paragraphs:
+#     print(paragraph)
+#     print("---------")
+
+
+print("Orgao-----------")
+if get_orgao(paragraphs):
+    orgao = get_orgao(paragraphs)
+else:
+    orgao = "Superior Tribunal de Justiça"
+
+print(orgao)
+print("Processo--------")
+print(get_processos(paragraphs))
+print("Ementa---------")
+print(get_named_ementa(paragraphs))
 # convert_to_csv(paragraphs)
 # convert_to_json(paragraphs)
 
