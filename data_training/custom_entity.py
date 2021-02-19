@@ -15,5 +15,5 @@ TRAIN_DATA = [
         ("aplicação da multa isolada", {"entities": [(0, 9, LABEL_1)]}),
         ("a indenização decorrente de desapropriação não encerra ganho de capital,", {"entities": [(55, 71, LABEL_1)]}),
         ("comprovar o efetivo ganho de capital decorrente da indenização por desapropriação do imóvel,", {"entities": [(20, 36, LABEL_1)]}),
-        ("apuração de ganho de capital,", {"entities": [(12, 28, LABEL_1)]}),
+        ("apuração de ganho de capital,", {"entities": [(12, 28, LABEL_1)]})]
         
