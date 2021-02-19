@@ -3,7 +3,7 @@ import re
 import json
 import csv
 
-pdf_name = "./acordaos-18-11-2020/padrao1/41.pdf"
+pdf_name = "./acordaos-18-11-2020/40.PDF"
 text = textract.process(pdf_name, method='pdfminer').decode('utf-8')
 
 def cleanner(text):
@@ -97,7 +97,7 @@ def get_unnamed_ementa(text):
     paragraphs = re.split('\n\n', text)
     texts = []
     rest = []
-    ends = ["vistos", "acordam"]
+    ends = ["vistos", "provido", "negado.", "acordam", "vistos,"] 
     mark = 0
     
     for paragraph in paragraphs:
@@ -196,18 +196,20 @@ paragraphs = cleanner(text)
 #     print(paragraph)
 #     print("---------")
 
+# print(paragraphs)
+# print("Orgao-----------")
+# if get_orgao(paragraphs):
+#     orgao = get_orgao(paragraphs)
+# else:
+#     orgao = "Superior Tribunal de Justiça"
 
-print("Orgao-----------")
-if get_orgao(paragraphs):
-    orgao = get_orgao(paragraphs)
-else:
-    orgao = "Superior Tribunal de Justiça"
-
-print(orgao)
-print("Processo--------")
-print(get_processos(paragraphs))
-print("Ementa---------")
-print(get_named_ementa(paragraphs))
+# print(orgao)
+# print("Processo--------")
+# print(get_processos(paragraphs))
+# print("Ementa---------")
+print(get_unnamed_ementa(text)[0])
+# print("Texto----------")
+# print(get_unnamed_ementa(text)[1])
 # convert_to_csv(paragraphs)
 # convert_to_json(paragraphs)
 
